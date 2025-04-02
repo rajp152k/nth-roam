@@ -35,12 +35,15 @@
   (setq nth-roam-default-vault tag)
   (nth-roam-register-vault tag vault-dir))
 
-(defun nth-roam-delete-vault (tag)
-  (setq nth-roam--vaults (cl-remove-if (lambda (ele)
-                                         (equal (car ele)
-                                                tag))
-                                       nth-roam--vaults))
-  (message (format "deleted roam vault : %s" tag)))
+(defun nth-roam-delete-vault ()
+  (interactive)
+  (let ((deletion-candidate (completing-read "nth roam vault delete: " nth-roam--vaults)))
+    (setq nth-roam--vaults (cl-remove-if (lambda (ele)
+                                           (equal (car ele)
+                                                  deletion-candidate))
+                                         nth-roam--vaults))
+    (delete-file (locate-user-emacs-file "nth-roam-%s.db" deletion-candidate))
+    (message (format "deleted roam vault : %s" deletion-candidate))))
 
 (defun nth-roam-select-db ()
   (setq org-roam-db-location
