@@ -43,8 +43,10 @@
   (message (format "deleted roam vault : %s" tag)))
 
 (defun nth-roam-select-db ()
-  (setq  org-roam-db-location
-         (locate-user-emacs-file (format "nth-roam-%s.db" nth-roam-current-vault))))
+  (setq org-roam-db-location
+        (locate-user-emacs-file (format "nth-roam-%s.db" nth-roam-current-vault)))
+  (unless (file-exists-p org-roam-db-location)
+    (org-roam-db-sync)))
 
 (defun nth-roam-init (init-vault-tag)
   (setq nth-roam-current-vault init-vault-tag)
@@ -63,8 +65,9 @@
   (if (and  (equal (cdr (assoc nth-roam-current-vault nth-roam--vaults))
                    org-roam-directory)
             (equal (locate-user-emacs-file (format "nth-roam-%s.db" nth-roam-current-vault))
-                   org-roam-db-location))
-      (message "nth-roam state consistent")
+                   org-roam-db-location)
+            (file-exists-p org-roam-db-location))
+      (message "nth-roam state consistent, all good")
     (progn
       (message "nth-roam state inconsistent, initiating fallback vault")
       (nth-roam-init-default-fallback))))

@@ -39,6 +39,7 @@ after org-roam use-package:
   (nth-roam-init "<init vault tag>"))
 #+end_src
 
+
 * Usage 
 
 ** nth-roam-select-vault
@@ -58,4 +59,8 @@ after org-roam use-package:
  - if something's funny, M-x this
  - I've mapped it to "spc n r v d"
  - initiates a switch to your fallback vault
-   
+
+* Contributions
+
+ - issues, PRs, Suggestions and optimizations are more than welcome
+ - I do need to refine this, please play around and break this for polishing out the rough edges
