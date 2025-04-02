@@ -42,6 +42,14 @@
                                        nth-roam--vaults))
   (message (format "deleted roam vault : %s" tag)))
 
+(defun nth-roam-select-db ()
+  (setq  org-roam-db-location
+         (locate-user-emacs-file (format "nth-roam-%s.db" nth-roam-current-vault))))
+
+(defun nth-roam-init (init-vault-tag)
+  (setq nth-roam-current-vault init-vault-tag)
+  (nth-roam-select-db))
+
 (defun nth-roam-init-default-fallback ()
   (org-roam-db--close-all)
   (setq nth-roam-current-vault nth-roam-default-vault)
@@ -51,6 +59,7 @@
 
 (defun nth-roam-doctor ()
   "check for state inconsitencies, and init default fallback when needed"
+  (interactive)
   (if (and  (equal (cdr (assoc nth-roam-current-vault nth-roam--vaults))
                    org-roam-directory)
             (equal (locate-user-emacs-file (format "nth-roam-%s.db" nth-roam-current-vault))
@@ -65,11 +74,9 @@
   (interactive)
   (message (format "current roam vault: %s" nth-roam-current-vault)))
 
-(defun nth-roam-select-db ()
-  (setq  org-roam-db-location
-         (locate-user-emacs-file (format "nth-roam-%s.db" nth-roam-current-vault))))
 
 (defun nth-roam-select-vault ()
+  (interactive)
   (let ((vault (completing-read "nth-roam-vault: " nth-roam-vaults)))
     (message (format "pre switch vault sync init"))
     (org-roam-db-sync)
