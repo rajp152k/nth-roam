@@ -38,12 +38,15 @@
 (defun nth-roam-delete-vault ()
   (interactive)
   (let ((deletion-candidate (completing-read "nth roam vault delete: " nth-roam--vaults)))
-    (setq nth-roam--vaults (cl-remove-if (lambda (ele)
-                                           (equal (car ele)
-                                                  deletion-candidate))
-                                         nth-roam--vaults))
-    (delete-file (locate-user-emacs-file "nth-roam-%s.db" deletion-candidate))
-    (message (format "deleted roam vault : %s" deletion-candidate))))
+    (cond ((equal deletion-candidate nth-roam-current-vault) (message "cannot delete current vault, switch out first"))
+          ((equal deletion-candidate nth-roam-default-vault) (message "cannot delete default fallback vault, alter configuration first"))
+          (t (progn
+               (setq nth-roam--vaults (cl-remove-if (lambda (ele)
+                                                      (equal (car ele)
+                                                             deletion-candidate))
+                                                    nth-roam--vaults))
+               (delete-file (locate-user-emacs-file "nth-roam-%s.db" deletion-candidate))
+               (message (format "deleted roam vault : %s" deletion-candidate)))))))
 
 (defun nth-roam-select-db ()
   (setq org-roam-db-location
