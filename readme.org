@@ -1,0 +1,61 @@
+#+title: Nth-Roam
+
+[[https://www.gnu.org/licenses/gpl-3.0][https://img.shields.io/badge/License-GPLv3-blue.svg]]
+
+Alter efficiently b/w multiple [org-roam](https://github.com/org-roam/org-roam) vaults
+
+* Overview
+
+  - intuitively manage org-roam context switches (db and directory) across multiple roam instances
+
+* Installation
+
+** Doom Emacs
+
+in your packages.el
+#+begin_src elisp
+(package! nth-roam
+  :recipe (:host github :repo "/rajp152k/nth-roam"))
+#+end_src
+
+in your config.el
+
+after org-roam use-package:
+#+begin_src elisp
+(use-package! nth-roam
+  :after org-roam
+  :config
+  
+  ;;register your fallback/default vault
+  ;;in case of state inconsitencies
+  (nth-roam-default-vault-register "<tag for default vault>"
+                                   "<path to vault dir>")
+  ;;register your vaults
+  (nth-roam-register-vaults "<tag-0>" "<vaultpath-0>")
+  ;; ... n-1 more vault registers
+  (nth-roam-register-vaults "<tag-n>" "<vaultpath-n>")
+
+  ;;choose your init vault tag
+  (nth-roam-init "<init vault tag>"))
+#+end_src
+
+* Usage 
+
+** nth-roam-select-vault
+
+ - completing read followed by context switch for roam-db and roam-dir
+ - I map it to "spc n r v a"
+ - proceed as usual with your org-roam ops post switch
+
+** nth-roam-yield-current-vault
+
+ - If you happen to forget the current vault you're in
+ - I map it to "spc n r v v"
+ - shows the current vault in the minibuffer
+
+** nth-roam-doctor
+
+ - if something's funny, M-x this
+ - I've mapped it to "spc n r v d"
+ - initiates a switch to your fallback vault
+   
