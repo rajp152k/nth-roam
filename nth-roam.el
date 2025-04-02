@@ -77,7 +77,7 @@
 
 (defun nth-roam-select-vault ()
   (interactive)
-  (let ((vault (completing-read "nth-roam-vault: " nth-roam-vaults)))
+  (let ((vault (completing-read "nth-roam-vault: " nth-roam--vaults)))
     (message (format "pre switch vault sync init"))
     (org-roam-db-sync)
     (org-roam-db--close)
