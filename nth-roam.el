@@ -56,6 +56,7 @@
 
 (defun nth-roam-init (init-vault-tag)
   (setq nth-roam-current-vault init-vault-tag)
+  (setq org-roam-directory (cdr (assoc nth-roam-current-vault nth-roam--vaults)))
   (nth-roam-select-db))
 
 (defun nth-roam-init-default-fallback ()
