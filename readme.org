@@ -1,14 +1,20 @@
 #+title: Nth-Roam
 
-[[https://www.gnu.org/licenses/gpl-3.0][https://img.shields.io/badge/License-GPLv3-blue.svg]]
-
-Alter efficiently b/w multiple [[https://github.com/org-roam/org-roam][org-roam]] vaults
-
 * Overview
 
   - intuitively manage org-roam context switches (db and directory) across multiple roam instances
 
-* Installation
+  **Status:** This project is currently under active development and testing. Feedback and contributions are highly welcome.
+
+* Features
+
+  - Seamlessly switch between multiple Org-roam vaults (directories and databases).
+  - Register and manage multiple vaults with simple tags.
+  - Define a default/fallback vault for initialization and recovery.
+  - Easily identify the currently active vault.
+  - Provides a "doctor" function to reset to the default vault in case of issues.
+
+* Installation (Requires Emacs and Org-roam)
 
 ** Doom Emacs
 
@@ -25,7 +31,7 @@ after org-roam use-package:
 (use-package! nth-roam
   :after org-roam
   :config
-  
+
   ;;register your fallback/default vault
   ;;in case of state inconsitencies
   (nth-roam-default-vault-register "<tag for default vault>"
@@ -39,28 +45,73 @@ after org-roam use-package:
   (nth-roam-init "<init vault tag>"))
 #+end_src
 
+** Manual Installation
 
-* Usage 
+If you are not using Doom Emacs or prefer manual installation:
+
+1.  Clone the repository to a directory on your system, for example, `~/elisp/nth-roam`.
+
+    #+begin_src shell
+    git clone https://github.com/rajp152k/nth-roam.git ~/elisp/nth-roam
+    #+end_src
+
+2.  Add the directory to your Emacs `load-path` in your configuration file (`init.el` or equivalent).
+
+    #+begin_src elisp
+    (add-to-list 'load-path "~/elisp/nth-roam")
+    #+end_src
+
+3.  Configure the package using `use-package` (recommended) or `require`. Place this configuration after your `org-roam` setup.
+
+    #+begin_src elisp
+    (use-package nth-roam
+      :after org-roam
+      :config
+
+      ;; register your fallback/default vault
+      ;; in case of state inconsistencies
+      (nth-roam-default-vault-register "<tag for default vault>"
+                                       "<path to vault dir>")
+      ;; register your vaults
+      (nth-roam-register-vault "<tag-0>" "<vaultpath-0>")
+      ;; ... n-1 more vault registers
+      (nth-roam-register-vault "<tag-n>" "<vaultpath-n>")
+
+      ;; choose your init vault tag
+      (nth-roam-init "<init vault tag>"))
+    #+end_src
+
+
+* Usage
+
+This section describes the main interactive functions provided by `nth-roam`. You will typically bind these functions to convenient keybindings in your Emacs configuration.
 
 ** nth-roam-select-vault
 
- - completing read followed by context switch for roam-db and roam-dir
- - I map it to "spc n r v a"
- - proceed as usual with your org-roam ops post switch
+ - This function presents a list of all registered vaults (using the tags you defined during setup) via Emacs's completing-read interface.
+ - Select a vault from the list to switch your active Org-roam context.
+ - The function updates the `org-roam-db-location` and `org-roam-directory` variables to point to the selected vault's database and directory.
+ - After switching, you can proceed as usual with your Org-roam operations (e.g., `org-roam-node-find`, `org-roam-buffer`).
+ - *Example Keybinding:* I map it to "spc n r v a" (using general.el or similar).
 
 ** nth-roam-yield-current-vault
 
- - If you happen to forget the current vault you're in
- - I map it to "spc n r v v"
- - shows the current vault in the minibuffer
+ - Use this function if you need to quickly check which Org-roam vault is currently active.
+ - It displays the tag of the current vault in the minibuffer.
+ - *Example Keybinding:* I map it to "spc n r v v".
 
 ** nth-roam-doctor
 
- - if something's funny, M-x this
- - I've mapped it to "spc n r v d"
- - initiates a switch to your fallback vault
+ - This function serves as a troubleshooting or reset mechanism.
+ - If you encounter inconsistencies or issues with the current vault state, calling `nth-roam-doctor` will force a switch back to the vault you registered as the default/fallback vault using `nth-roam-default-vault-register`.
+ - This can help restore a known good state for Org-roam.
+ - *Example Keybinding:* I've mapped it to "spc n r v d".
 
 * Contributions
 
- - issues, PRs, Suggestions and optimizations are more than welcome
- - I do need to refine this, please play around and break this for polishing out the rough edges
+Contributions are welcome! If you encounter issues, have suggestions, or would like to contribute code, please feel free to:
+
+  - Open an issue on the GitHub repository.
+  - Submit a pull request with your proposed changes.
+
+Your feedback and help in testing are invaluable for improving this package.
